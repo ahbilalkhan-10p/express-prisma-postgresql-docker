@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+
+  boilerplatedb:
+    image: postgres:14.1-alpine
+#    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=boilerplate
+    ports:
+      - '5432:5432'
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+  boilerplate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      network: host
+    container_name: boilerplate
+    environment:
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_HOSTNAME=boilerplatedb
+      - DB_PORT=5432
+      - DB_NAME=boilerplate
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src:/app/src
+      - ./tests:/app/tests
+    networks:
+      - app-network
+    depends_on:
+      - boilerplatedb
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  pg_data:
