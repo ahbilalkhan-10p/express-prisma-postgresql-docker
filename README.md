@@ -7,9 +7,3 @@ Node.js - TypeScript, Express, Prisma 2, PostgreSQL backend
 ```console
 docker-compose up --build
 ```
-
-## Start
-
-```console
-npm start
-```
